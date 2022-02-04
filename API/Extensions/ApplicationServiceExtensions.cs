@@ -1,15 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
-using Persistence;
 using Microsoft.EntityFrameworkCore;
-using MidiatR;
+using MediatR;
 using AutoMapper;
 using Application.Core;
+using Persistence;
 
 namespace API.Extensions
 {
