@@ -53,7 +53,7 @@ namespace API
 
             services.AddMediatR(typeof(Application.Activities.List.Handler).Assembly);
             services.AddAutoMapper(typeof(MappingProfiles).Assembly);
-            //services.AddApplicationServices(_configuration);
+            //services.AddApplicationServices(_configuration); 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
