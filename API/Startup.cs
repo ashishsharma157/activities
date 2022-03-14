@@ -13,9 +13,12 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
+using FluentValidation.AspNetCore;
 using Persistence;
 using MediatR;
 using Application.Core;
+using Application.Activities;
+using API.Middleware;
 
 namespace API
 {
@@ -53,15 +56,20 @@ namespace API
 
             services.AddMediatR(typeof(Application.Activities.List.Handler).Assembly);
             services.AddAutoMapper(typeof(MappingProfiles).Assembly);
+            services.AddControllers().AddFluentValidation(Config =>
+            {
+                Config.RegisterValidatorsFromAssemblyContaining<Create>();
+            });
             //services.AddApplicationServices(_configuration); 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseMiddleware<ExceptionMiddleware>();
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
+                //app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "WebAPIv5 v1"));
             }
