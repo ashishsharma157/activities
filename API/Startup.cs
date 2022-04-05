@@ -13,12 +13,15 @@ using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using FluentValidation.AspNetCore;
 using Persistence;
 using MediatR;
 using Application.Core;
 using Application.Activities;
 using API.Middleware;
+using API.Extensions;
 
 namespace API
 {
@@ -56,11 +59,16 @@ namespace API
 
             services.AddMediatR(typeof(Application.Activities.List.Handler).Assembly);
             services.AddAutoMapper(typeof(MappingProfiles).Assembly);
-            services.AddControllers().AddFluentValidation(Config =>
+            services.AddControllers(opt=>{
+                var policy=new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+                opt.Filters.Add(new AuthorizeFilter(policy));
+            })
+            .AddFluentValidation(Config =>
             {
                 Config.RegisterValidatorsFromAssemblyContaining<Create>();
             });
             //services.AddApplicationServices(_configuration); 
+            services.AddIdentityServices(_configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -79,7 +87,7 @@ namespace API
             app.UseRouting();
 
             app.UseCors("CorsPolicy");
-
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
