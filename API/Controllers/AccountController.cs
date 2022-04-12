@@ -57,11 +57,13 @@ namespace API.Controllers
         {
             if(_userManager.Users.Any(x=>x.Email==register.Email))
             {
-                return BadRequest("Email taken");
+                ModelState.AddModelError("email", "Email taken");
+                return ValidationProblem();
             }
             if(_userManager.Users.Any(x=>x.UserName==register.UserName))
             {
-                return BadRequest("User name taken");
+                ModelState.AddModelError("Username", "username taken");
+                return ValidationProblem();
             }
 
             var user=new AppUser{
