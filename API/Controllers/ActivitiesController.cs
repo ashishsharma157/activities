@@ -11,7 +11,6 @@ using Domain;
 
 namespace API.Controllers
 {
-    [AllowAnonymous]
     public class ActivitiesController : BaseApiController
     {
 
@@ -34,6 +33,7 @@ namespace API.Controllers
             return HandleResult(await Mediator.Send(new Application.Activities.Create.Command { Activity = activity }));
         }
 
+        [Authorize(Policy="IsActivityHost")]
         [HttpPut("{Id}")]
         public async Task<IActionResult> EditActivity(Guid id, Activity activity)
         {
@@ -41,10 +41,17 @@ namespace API.Controllers
             return HandleResult(await Mediator.Send(new Application.Activities.Edit.Command { Activity = activity }));
         }
 
+        [Authorize(Policy="IsActivityHost")]
         [HttpDelete("{Id}")]
         public async Task<IActionResult> DeleteActivity(Guid id)
         {
             return HandleResult(await Mediator.Send(new Application.Activities.Delete.Command { Id = id }));
+        }
+
+        [HttpPost("{id}/attend")]
+        public async Task<IActionResult> Attend(Guid id)
+        {
+            return HandleResult(await Mediator.Send(new Application.Activities.UpdateAttendance.Command{Id= id}));
         }
     }
 }

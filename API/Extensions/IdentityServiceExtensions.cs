@@ -8,9 +8,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Authorization;
 using Domain;
 using API.Services;
 using Persistence;
+using Infrastructure.Security;
 
 namespace API.Extensions
 {
@@ -34,6 +36,16 @@ namespace API.Extensions
                     ValidateAudience=false
                 };
             });
+
+            services.AddAuthorization(opt=>
+            {
+                opt.AddPolicy("IsActivityHost", policy=>
+                {
+                    policy.Requirements.Add(new IsHostRequirement());
+                });
+            });
+
+            services.AddTransient<IAuthorizationHandler, IsHostRequirementHandler>();
             services.AddScoped<TokenService>();
             return services;
         }

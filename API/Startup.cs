@@ -20,6 +20,8 @@ using Persistence;
 using MediatR;
 using Application.Core;
 using Application.Activities;
+using Application.Interfaces;
+using Infrastructure.Security;
 using API.Middleware;
 using API.Extensions;
 
@@ -59,6 +61,7 @@ namespace API
 
             services.AddMediatR(typeof(Application.Activities.List.Handler).Assembly);
             services.AddAutoMapper(typeof(MappingProfiles).Assembly);
+            services.AddScoped<IUserAccessor, UserAccessor>();
             services.AddControllers(opt=>{
                 var policy=new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
                 opt.Filters.Add(new AuthorizeFilter(policy));

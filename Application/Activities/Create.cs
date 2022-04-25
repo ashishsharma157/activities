@@ -7,6 +7,7 @@ using MediatR;
 using Domain;
 using Persistence;
 using Application.Core;
+using Application.Interfaces;
 
 namespace Application.Activities
 {
@@ -27,12 +28,24 @@ namespace Application.Activities
         public class Handler : IRequestHandler<Command, Result<Unit>>
         {
             private readonly DataContext _context;
-            public Handler(DataContext context)
+            private readonly IUserAccessor _userAccessor;
+
+            public Handler(DataContext context, IUserAccessor userAccessor)
             {
                 _context = context;
+                _userAccessor = userAccessor;
             }
             public async Task<Result<Unit>> Handle(Command Request, CancellationToken cancellationToken)
             {
+                var user= _context.Users.FirstOrDefault(x=>x.UserName==_userAccessor.GetUserName());
+
+                var attendee=new ActivityAttendee
+                {
+                    AppUser=user,
+                    Activity=Request.Activity,
+                    IsHost=true
+                };
+                Request.Activity.Attendees.Add(attendee);
                 _context.Activities.Add(Request.Activity);
                 var result=await _context.SaveChangesAsync()>0;
 
