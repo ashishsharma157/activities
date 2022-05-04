@@ -24,6 +24,7 @@ using Application.Interfaces;
 using Infrastructure.Security;
 using API.Middleware;
 using API.Extensions;
+using Infrastructure.Photos;
 
 namespace API
 {
@@ -62,6 +63,8 @@ namespace API
             services.AddMediatR(typeof(Application.Activities.List.Handler).Assembly);
             services.AddAutoMapper(typeof(MappingProfiles).Assembly);
             services.AddScoped<IUserAccessor, UserAccessor>();
+            services.AddScoped<IPhotoAccessor, PhotoAccessor>();
+            services.Configure<CloudinarySettings>(_configuration.GetSection("Cloudinary"));
             services.AddControllers(opt=>{
                 var policy=new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
                 opt.Filters.Add(new AuthorizeFilter(policy));
