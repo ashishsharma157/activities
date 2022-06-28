@@ -13,6 +13,7 @@ import LoginForm from '../../features/users/LoginForm';
 import { useStore } from '../store/Store';
 import LoadingComponent from './LoadingComponent';
 import ModalContainer from '../common/modal/modalContainer';
+import ProfilePage from '../../features/Profiles/ProfilePage';
 function App() {
   const location=useLocation();
   const {commonStore, userStore}=useStore();
@@ -42,6 +43,7 @@ if(!commonStore.appLoaded) return <LoadingComponent content='Loading App...'/>
         <Route path='/activities' element={<ActivityDashboard/>}/>   
         <Route path='/activities/:id' element={<ActivityDetails/>}/>        
         <Route path='/createactivity' element={<ActivityForm key={location.key}/>}/>   
+        <Route path='/profiles/:username' element={<ProfilePage/>}/>
         <Route path='/manage/:id' element={<ActivityForm key={location.key} />}/>
         <Route path='/login' element={<LoginForm/>}/>
         <Route path='*' element={<NotFound/>}/>     
