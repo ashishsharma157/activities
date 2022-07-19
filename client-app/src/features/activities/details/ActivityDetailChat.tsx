@@ -2,8 +2,7 @@ import { Formik, Form, Field, FieldProps } from 'formik';
 import { observer } from 'mobx-react-lite'
 import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom';
-import {Segment, Header, Comment, Button, Loader} from 'semantic-ui-react'
-import MyTextArea from '../../../app/common/form/MyTextArea';
+import {Segment, Header, Comment, Loader} from 'semantic-ui-react'
 import { useStore } from '../../../app/store/Store';
 import * as Yup from 'yup';
 import { formatDistanceToNow } from 'date-fns/esm';
@@ -51,9 +50,9 @@ export default observer(function ActivityDetailChat({activityId}:Props) {
                                                 rows={2}
                                                 {...props.field}
                                                 onKeyPress={e=>{
-                                                    if(e.key=='Enter' && e.shiftKey)
+                                                    if(e.key==='Enter' && e.shiftKey)
                                                         return;
-                                                    if(e.key=='Enter' && !e.shiftKey)
+                                                    if(e.key==='Enter' && !e.shiftKey)
                                                     {
                                                         e.preventDefault();
                                                         isValid && handleSubmit();

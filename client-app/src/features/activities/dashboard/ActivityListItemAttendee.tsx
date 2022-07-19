@@ -10,13 +10,20 @@ interface Props{
 }
 export default observer(function ActivityListItemAttendee({attendees}:Props)
 {
+    const style={
+        borderColor: 'orange',
+        borderWidth: 3
+    }
     return (
         <List horizontal>
             {attendees.map(attendee=>(
                             <Popup hoverable key={attendee.username}
                             trigger={
                            <List.Item key={attendee.username} as={Link} to={`/profiles/${attendee.username}`}>
-                           <Image size='mini' circular src={attendee.image ||'/assets/user.png'}/>
+                           <Image 
+                                size='mini' circular src={attendee.image ||'/assets/user.png'}
+                                bordered
+                                style={attendee.following? style:null}/>
                        </List.Item> }
                        >
                            <Popup.Content>
