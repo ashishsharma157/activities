@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Persistence;
 using Domain;
-
+using Application.Activities;
 
 namespace API.Controllers
 {
@@ -15,10 +15,10 @@ namespace API.Controllers
     {
 
         [HttpGet]
-        public async Task<IActionResult> GetActivites()
+        public async Task<IActionResult> GetActivites([FromQuery]ActivityParams param)
         {
             //return await _context.Activities.ToListAsync();
-            return HandleResult(await Mediator.Send(new Application.Activities.List.Query()));
+            return HandlePagedResult(await Mediator.Send(new Application.Activities.List.Query{Params=param}));
         }
 
         [HttpGet("{id}")]
