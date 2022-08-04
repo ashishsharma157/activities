@@ -14,6 +14,7 @@ import { useStore } from '../store/Store';
 import LoadingComponent from './LoadingComponent';
 import ModalContainer from '../common/modal/modalContainer';
 import ProfilePage from '../../features/Profiles/ProfilePage';
+import PrivateRoute from './PrivateRoute';
 function App() {
   const location=useLocation();
   const {commonStore, userStore}=useStore();
@@ -40,11 +41,11 @@ if(!commonStore.appLoaded) return <LoadingComponent content='Loading App...'/>
       <Container style={{marginTop:'7em'}}>
         <Routes>
         <Route path='/' element={<HomePage/>}/>
-        <Route path='/activities' element={<ActivityDashboard/>}/>   
-        <Route path='/activities/:id' element={<ActivityDetails/>}/>        
-        <Route path='/createactivity' element={<ActivityForm key={location.key}/>}/>   
-        <Route path='/profiles/:username' element={<ProfilePage/>}/>
-        <Route path='/manage/:id' element={<ActivityForm key={location.key} />}/>
+        <Route path='/activities' element={<PrivateRoute><ActivityDashboard/></PrivateRoute>}/>   
+        <Route path='/activities/:id' element={<PrivateRoute><ActivityDetails/></PrivateRoute>}/>        
+        <Route path='/createactivity' element={<PrivateRoute><ActivityForm key={location.key}/></PrivateRoute>}/>   
+        <Route path='/profiles/:username' element={<PrivateRoute><ProfilePage/></PrivateRoute>}/>
+        <Route path='/manage/:id' element={<PrivateRoute><ActivityForm key={location.key} /></PrivateRoute>}/>
         <Route path='/login' element={<LoginForm/>}/>
         <Route path='*' element={<NotFound/>}/>     
         </Routes>
