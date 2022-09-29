@@ -8,6 +8,8 @@ using System.IdentityModel.Tokens.Jwt;
 using Domain;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using System.Security.Cryptography;
+
 namespace API.Services
 {
     public class TokenService
@@ -32,7 +34,7 @@ namespace API.Services
             var tokenDescriptor=new SecurityTokenDescriptor
             {
                 Subject=new ClaimsIdentity(claims),
-                Expires=DateTime.Now.AddDays(7),
+                Expires=DateTime.UtcNow.AddMinutes(10),
                 SigningCredentials=creds
             };
 
@@ -40,6 +42,14 @@ namespace API.Services
 
             var token=tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
+        }
+
+        public RefreshToken GenerateRefreshToken()
+        {
+            var randomNumber=new byte[32];
+            using var rng=RandomNumberGenerator.Create();
+            rng.GetBytes(randomNumber);
+            return new RefreshToken{Token=Convert.ToBase64String(randomNumber)};
         }
     }
 }
